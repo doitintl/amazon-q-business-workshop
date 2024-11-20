@@ -1,0 +1,414 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: API Gateway with Lambda Functions for managing leave balances using DynamoDB
+
+Resources:
+  RestaurantBookingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: RestaurantBooking
+      AttributeDefinitions:
+        - AttributeName: booking_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: booking_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  RestaurantBookingApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name:  RestaurantBookingAPI
+
+  BookingResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref RestaurantBookingApi
+      ParentId: !GetAtt RestaurantBookingApi.RootResourceId
+      PathPart: booking
+
+  CreateBookingMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref RestaurantBookingApi
+      ResourceId: !Ref BookingResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateBookingFunction.Arn}/invocations
+      MethodResponses:
+        - StatusCode: 200
+
+  BookingIdResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref RestaurantBookingApi
+      ParentId: !GetAtt BookingResource.ResourceId
+      PathPart: "{id}"
+
+  GetBookingMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref RestaurantBookingApi
+      ResourceId: !Ref BookingIdResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.id: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetBookingFunction.Arn}/invocations
+      MethodResponses:
+        - StatusCode: 200
+
+  CancelBookingMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref RestaurantBookingApi
+      ResourceId: !Ref BookingIdResource
+      HttpMethod: DELETE
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.id: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CancelBookingFunction.Arn}/invocations
+      MethodResponses:
+        - StatusCode: 200
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref RestaurantBookingApi
+      StageName: demo
+    DependsOn:
+      - CreateBookingMethod
+      - GetBookingMethod
+      - CancelBookingMethod
+
+  CreateBookingFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 25
+      Code:
+        ZipFile: |
+          import json
+          import uuid
+          import boto3
+          from botocore.exceptions import ClientError
+          import logging
+          from datetime import datetime, timedelta
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('RestaurantBooking')
+
+          def create_booking(date, name, hour, num_guests):
+              """
+              Create a new restaurant booking
+              
+              Args:
+                  date (string): The date of the booking (YYYY-MM-DD)
+                  name (string): Name to identify your reservation
+                  hour (string): The hour of the booking (HH:MM)
+                  num_guests (integer): The number of guests for the booking
+              """
+              try:
+                  booking_id = str(uuid.uuid4())[:8]
+                  table.put_item(
+                      Item={
+                          'booking_id': booking_id,
+                          'date': date,
+                          'name': name,
+                          'hour': hour,
+                          'num_guests': num_guests
+                      }
+                  )
+                  return {'booking_id': booking_id}
+              except ClientError as e:
+                  logger.error(f"Error creating booking: {e.response['Error']['Message']}")
+                  return {'error': 'Failed to create booking'}
+
+          def validate_date(date_str):
+              try:
+                  booking_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                  today = datetime.now().date()
+                  max_date = today + timedelta(days=365)  # Allow bookings up to 1 year in advance
+                  if booking_date < today or booking_date > max_date:
+                      return False
+                  return True
+              except ValueError:
+                  return False
+
+          def validate_hour(hour_str):
+              try:
+                  hour = datetime.strptime(hour_str, "%H:%M").time()
+                  # Assuming restaurant hours are from 09:00 to 22:00
+                  if hour < datetime.strptime("9", "%H").time() or hour > datetime.strptime("22", "%H").time():
+                      return False
+                  return True
+              except ValueError:
+                  return False
+
+          def handler(event, context):
+              logger.info(f"Event: {json.dumps(event)}")
+              body = json.loads(event['body'])
+              logger.info(f"Event['body']: {json.dumps(body)}")
+
+              # Check if all required parameters are present
+              required_params = ['date', 'name', 'hour', 'num_guests']
+              if not all(param in body for param in required_params):
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Missing required parameters'})
+                  }
+
+              date = body['date']
+              name = body['name']
+              hour = body['hour']
+              num_guests = body['num_guests']
+
+              # Validate date
+              if not validate_date(date):
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Invalid date. Please use YYYYMMDD format and ensure it\'s not in the past or more than a year in the future.'})
+                  }
+
+              # Validate name
+              if not name or len(name) > 100:
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Invalid name. Name must not be empty and should be less than 100 characters.'})
+                  }
+
+              # Validate hour
+              if not validate_hour(hour):
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Invalid hour. Please use H format and ensure it\'s within restaurant hours (9:00-22:00).'})
+                  }
+
+              # Validate num_guests
+              try:
+                  num_guests = int(num_guests)
+                  if num_guests <= 0 or num_guests > 20:  # Assuming max party size is 20
+                      raise ValueError
+              except ValueError:
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Invalid number of guests. Please enter a number between 1 and 20.'})
+                  }
+
+              response = create_booking(date, name, hour, num_guests)
+              
+              if 'error' in response:
+                  return {
+                      'statusCode': 500,
+                      'body': json.dumps(response)
+                  }
+              
+              message = {
+                  'message': f'Success! Your booking on {date} at {hour} by {name} for {num_guests} guests is confirmed. Your booking ID is {response["booking_id"]}.',
+                  'booking_id': response['booking_id']
+              }
+
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps(message)
+              }
+      Runtime: python3.12
+
+  GetBookingFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 25
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          from botocore.exceptions import ClientError
+          from decimal import Decimal
+          import logging
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('RestaurantBooking')
+
+          def get_booking_details(booking_id):
+              """
+              Retrieve details of a restaurant booking
+              
+              Args:
+                  booking_id (string): The ID of the booking to retrieve
+              """
+              try:
+                  response = table.get_item(Key={'booking_id': booking_id})
+                  if 'Item' in response:
+                      return response['Item']
+                  else:
+                      return {'message': f'No booking found with ID {booking_id}'}
+              except ClientError as e:
+                  logger.error(f"Error retrieving booking: {e.response['Error']['Message']}")
+                  return {'error': 'Failed to retrieve booking details'}
+
+          def decimal_serializer(obj):
+              if isinstance(obj, Decimal):
+                  return str(obj)
+              raise TypeError("Type not serializable")
+
+          def handler(event, context):
+              logger.info(f"Event: {json.dumps(event)}")
+              
+              # Check if pathParameters exists and is not None
+              if not event.get('pathParameters'):
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Missing path parameters'})
+                  }
+              
+              # Check if 'id' exists in pathParameters
+              booking_id = event['pathParameters'].get('id')
+              if not booking_id:
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Missing booking_id parameter'})
+                  }
+              
+              response = get_booking_details(booking_id)
+              
+              return {
+                  'statusCode': 200 if 'error' not in response else 500,
+                  'body': json.dumps(response, default=decimal_serializer)
+              }
+      Runtime: python3.12
+
+  CancelBookingFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 25
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          from botocore.exceptions import ClientError
+          import logging
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('RestaurantBooking')
+
+          def delete_booking(booking_id):
+              """
+              Delete an existing restaurant booking
+              
+              Args:
+                  booking_id (str): The ID of the booking to delete
+              """
+              try:
+                  response = table.delete_item(Key={'booking_id': booking_id})
+                  if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                      return {'message': f'Booking with ID {booking_id} deleted successfully'}
+                  else:
+                      return {'message': f'Failed to delete booking with ID {booking_id}'}
+              except ClientError as e:
+                  logger.error(f"Error deleting booking: {e.response['Error']['Message']}")
+                  return {'error': 'Failed to delete booking'}
+
+          def handler(event, context):
+              logger.info(f"Event: {json.dumps(event)}")
+              
+              if not event.get('pathParameters'):
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Missing path parameters'})
+                  }
+              
+              booking_id = event['pathParameters'].get('id')
+              if not booking_id:
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'message': 'Missing booking_id parameter'})
+                  }
+              
+              response = delete_booking(booking_id)
+              
+              return {
+                  'statusCode': 200 if 'error' not in response else 500,
+                  'body': json.dumps(response)
+              }
+      Runtime: python3.12
+
+  ApiGatewayLambdaInvokePermissionCreateBooking:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CreateBookingFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestaurantBookingApi}/*/*
+
+  ApiGatewayLambdaInvokePermissionGetBooking:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt GetBookingFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestaurantBookingApi}/*/*
+
+  ApiGatewayLambdaInvokePermissionCancelBooking:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CancelBookingFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestaurantBookingApi}/*/*
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaDynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/RestaurantBooking
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+
+Outputs:
+  ApiEndpoint:
+    Description: API Endpoint URL
+    Value: !Sub https://${RestaurantBookingApi}.execute-api.${AWS::Region}.amazonaws.com/demo

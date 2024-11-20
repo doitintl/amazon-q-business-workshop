@@ -1,0 +1,155 @@
+openapi: 3.0.1
+info:
+  title: "Restaurant booking"
+  description: "API for booking a table in the restaurant using DynamoDB"
+  version: 1.0.0
+servers:
+- url: "https://j542ewu1hl.execute-api.us-east-1.amazonaws.com/demo"
+paths:
+  /booking:
+    post:
+      description: "Create a new restaurant booking"
+      requestBody:
+        description: "Details of the booking request"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                  description: "The date of the booking"
+                name:
+                  type: string
+                  description: "Name to identify your reservation"
+                hour:
+                  type: string
+                  format: time
+                  description: "The hour of the booking"
+                num_guests:
+                  type: string
+                  description: "The number of guests for the booking"
+              required:
+                - date
+                - name
+                - hour
+                - num_guests
+              example:
+                date: "2025-11-03"
+                name: "Duoh"
+                hour: "10:00"
+                num_guests: "5"
+      responses:
+        "200":
+          description: "Successfully book a restaurant table in the system"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    description: "Success message with the booking ID that has been created"
+                example:
+                  Message: "Success! Your booking on 2025-11-03 at 10:00 by Duoh is confirmed. Your booking ID is 7f0bdd0c."
+        "404":
+          description: "Unable to book a restaurant table in the system"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: "Missing required parameters"
+                example:
+                  Error: "Missing required booking inforamtion"
+  /booking/{id}:
+    get:
+      description: "Retrieve details of a restaurant booking"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The ID of the booking to retrieve"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "A JSON object containing the booking detail"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  booking_id:
+                    type: string
+                    description: "The ID of the booking to retrieve"
+                  name:
+                    type: string
+                    description: "Name to identify your reservation"
+                  date:
+                    type: string
+                    format: date
+                    description: "The date of the booking"
+                  hour:
+                    type: string
+                    format: time
+                    description: "The hour of the booking"
+                  num_guests:
+                    type: string
+                    description: "The number of guests for the booking"
+                example:
+                  booking_id: "7f0bdd0c"
+                  name: "Duoh"
+                  date: "2025-11-03"
+                  hour: "10:00"
+                  num_guests: "5"
+        "404":
+          description: "Booking ID not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: "Error message indicating booking ID not found"
+                example:
+                  Error: "No booking ID 7f0bdd0c found"
+    delete:
+      description: "Delete (cancel) an existing restaurant booking"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The ID of the booking to be deleted"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "Cancel an existing restaurant booking successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    description: "Success message with the booking ID that was deleted"
+                example:
+                  Message: "Booking ID 7f0bdd0c was deleted successfully"
+        "404":
+          description: "Booking ID not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: "Error message indicating booking ID not found"
+                example:
+                  Error: "No booking ID 7f0bdd0c found"
