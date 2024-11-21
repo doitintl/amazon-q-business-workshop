@@ -2,9 +2,6 @@ Conditions:
   IfCreateIDC: !Equals 
     - !Ref CreateIDC
     - "yes"
-  IfCreateQApp: !Equals 
-    - !Ref CreateQApp
-    - "yes"
 
 Resources:
   IDCLambdaExecutionRole:
@@ -163,17 +160,6 @@ Resources:
           IgnorePublicAcls: Yes
           RestrictPublicBuckets: Yes
 
-  QBusinessApp:
-    Type: AWS::QBusiness::Application
-    Condition: IfCreateQApp
-    Properties:
-      DisplayName: workshop-app-01
-      Description: qbusiness demo app
-      IdentityCenterInstanceArn: !GetAtt IDCInstance.InstanceArn
-      RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/aws-service-role/qbusiness.amazonaws.com/AWSServiceRoleForQBusiness
-    DependsOn:
-      - IDCInstance
-
   DataSourceRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -307,13 +293,6 @@ Parameters:
       - "no"
       - "yes"
     Description: Whether this stack should create AWS IAM Identity Center instance and setup users/groups. Answer "Yes" only if the AWS account does not have IDC enabled and is allow listed to enable the same. If not sure, leave as default of "no".
-  CreateQApp:
-    Type: String
-    Default: "no"
-    AllowedValues:
-      - "no"
-      - "yes"
-    Description: Whether this stack should create samples Amazon Q Business Application. If not sure, leave as default of "no".
 
 Outputs:
   S3BucketUrl:
