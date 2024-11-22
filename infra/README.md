@@ -1,4 +1,4 @@
-## Infrastructure setup
+# Infrastructure setup
 In this part we are going to deploy cloudformation templates to provision necessary resources for this lab. You can provision it on any AWS regions where Amazon Q Business is available.
 
 1. Download [the cloudformation template](../cf-q-biz-setup.yaml) to your local machine.

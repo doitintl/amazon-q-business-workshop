@@ -29,4 +29,4 @@ What you need
 - An IAM User with the AdministratorAccess policy
 
 Firstly, follow [the instructions](infra) to set up the lab infrastructure.  
-Then, follow [the above topics](#what-it-covers).
+Then, follow [the above topics](#what-it-covers) in order.
