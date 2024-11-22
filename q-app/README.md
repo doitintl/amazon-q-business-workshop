@@ -5,17 +5,17 @@ From the previous setup, we also provisioed an account instance of IAM Identity 
 1. Open AWS Console and navigate to [IAM Identity Center](https://console.aws.amazon.com/singlesignon/home)
 2. On the left navigation bar, click on **Users** to review the list of users created.
 ![IDC-1](./img/idc-1.png)
-Do the same for the group.
+You can also view the group.
 ![IDC-2](./img/idc-2.png)
 
-3. We are going to reset user passwords for sign-on to Amazon Q Business application web experience.  
+3. We are going to reset a user password for sign-on to Amazon Q Business application web experience.  
 Navigate to a user `doit` and click **Reset password** located at the top right of the page.
 ![IDC-3](./img/idc-3.png)  
 Choose *Generate a one-time password and share the password with the user*, and click **Reset password**.  
 ![IDC-4](./img/idc-4.png)  
-One-time password will be generated.
+One-time password will be generated.  
 ![IDC-5](./img/idc-5.png)  
-Open AWS access portal URL in a new tab and sign in with a user name `doit` with the one-time password.
+Open AWS access portal URL in a new tab and sign in with a user name `doit` with the one-time password.  
 Input your new password for next-time access.  
 ![IDC-6](./img/idc-6.png)  
 Repeat the same steps for the rest of users, if you would like to use other users.  
