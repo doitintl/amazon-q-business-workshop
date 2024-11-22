@@ -38,6 +38,6 @@ In Web experience settings, under **Choose a method to authorize Amazon Q Busine
 Then, click **Create**.  
 ![qapp-4](./img/qapp-4.png)  
 
-5. After complete, you can use **Deployed URL** to access Amazon Q Business application
+5. After complete, you can use **Deployed URL** to access Amazon Q Business application.
 
 ![qapp-5](./img/qapp-5.png)  
