@@ -82,5 +82,4 @@ Amazon S3 connector support Amazon Q Business access control by configuring the 
 Next we will chat with our knowledge bases via Amazon Q Business application.  
 ![kb-20](./img/kb-20.png)  
 
-## Converstaion testing
-1. Copy the Deployed URL located under Web Experience tab in the application detail page, and open the URL is a private web browser instance to start a conversation. Use anyone of the user name (eg. john_doe) setup in IDC to sign-in. You will see a screen similar to the screenshot below.
+In [the next lab](../chat/README.md), we will try chatting with Amazon Q Business application.
