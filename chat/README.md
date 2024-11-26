@@ -7,7 +7,7 @@ You will be asked to sign in using the username that we created [in the IDC setu
 ![chat-2](./img/chat-2.png)  
 
 2. As you can see tabs above the chat textbox. There are Company knowledge and General knowledge. If Company Knowledge is selected, the application retrieves information from the configured knowledge bases to respond to the user. In contrast, when General Knowledge is chosen, the application relies on model knowledge derived from trained data to interact with the user.  
-To understand better, please check the below examples.  
+To understand better, please check the below examples using this question `When was Amazon Q Business released`.   
 
 Ask using Company Knowledge.  
 ![chat-3](./img/chat-3.png)  
@@ -15,7 +15,7 @@ Ask using General Knowledge.
 ![chat-4](./img/chat-4.png)  
 
 3. Let's ask questions relevant to data sources we configured previously.  
-Ask a question `How many do AWS offer fully managed Retrieval Augmented Generation options? And which one is the first recommended by AWS?`.  
+Ask a question `How many fully managed Retrieval Augmented Generation (RAG) options does AWS offer, and which one is the first recommended by AWS?`.  
 ![chat-5](./img/chat-5.png)  
 As you can see the source the application uses to answer us from the Web crawler data source.  
 
@@ -23,7 +23,7 @@ Next, ask this question `When will I receive a debit card after open an account?
 ![chat-6](./img/chat-6.png)  
 The application uses the source from the Uploaded file data source.  
 
-Ask another `What are lunch menu?`.  
+Ask another `What are the options on the lunch menu?`.  
 ![chat-7](./img/chat-7.png)  
 The source is from the S3 data source.  
 
