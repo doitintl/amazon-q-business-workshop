@@ -21,4 +21,4 @@ In this part we are going to deploy cloudformation templates to provision necess
 8. You can view created resources on Outputs.
 ![CloudFormation-6](./img/infrasetup-6.png)
 
-Now you are ready to experiment Amazon Q Business.
+Now you are ready to experiment Amazon Q Business in [the next step](../q-app/README.md).

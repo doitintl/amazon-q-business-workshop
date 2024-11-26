@@ -20,7 +20,7 @@ Input your new password for next-time access.
 ![IDC-6](./img/idc-6.png)  
 Repeat the same steps for the rest of users, if you would like to use other users.  
 
-## Amazon Q Business application setup
+## Amazon Q Business application creating
 
 1. Open AWS Console and navigate to [Amazon Q Business](https://console.aws.amazon.com/amazonq/business)  
 2. Click **Get started** and it wil navigate to Applications page. Then clice **Create application**.  
@@ -38,3 +38,5 @@ Then, click **Create**.
 ![qapp-4](./img/qapp-4.png)  
 5. After complete, you can use **Deployed URL** to access Amazon Q Business application.  
 ![qapp-5](./img/qapp-5.png)  
+
+In [the next step](../kb/README.md), we are going to experiment with knowledge bases.
