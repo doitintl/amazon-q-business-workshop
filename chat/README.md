@@ -34,4 +34,4 @@ Use the query `Your task is to create a reminder email template for guests who h
 As you can see, the email template is generated with Wednesday's lunch special menu.
 
 Since users can ask any information from Q Business, this may introduce risks or lead to unintended usage.  
-[Next](../guardrail), we will manage user input using admin controls and guardrails.
+As [the next steps](../guardrail), we will manage user input using admin controls and guardrails.

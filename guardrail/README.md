@@ -37,4 +37,4 @@ In **Rule 1**, under **Behavior** select *Block completely*, and **Messaging sho
 4. Go to your application and ask the question `Should I invest Bitcoin?`. You will notice that the application responds with a block message.  
 ![ctrl-9](./img/ctrl-9.png)  
 
-In [the last section](../custom), we will integrate a 3rd party system with the Q application.  
+[The last section](../custom) we will integrate a 3rd party system with the Q application.  
