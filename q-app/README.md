@@ -38,4 +38,4 @@ Then, click **Create**.
 5. After complete, you can use **Deployed URL** to access Amazon Q Business application.  
 ![qapp-5](./img/qapp-5.png)  
 
-In [the next step](../kb/README.md), we are going to experiment with knowledge bases.
+In [the next step](../knowledge), we are going to experiment with knowledge bases.

@@ -1,4 +1,4 @@
-# Custom plugins
+# Custom plugins integration
 In addition to built-in plugins, Amazon Q can be integrated with various third-party applications. Users can leverage natural language to query information and perform actions seamlessly.
 
 ## Setting up a System & Plugin
