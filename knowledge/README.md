@@ -82,4 +82,4 @@ Amazon S3 connector support Amazon Q Business access control by configuring the 
 Next we will chat with our knowledge bases via Amazon Q Business application.  
 ![kb-20](./img/kb-20.png)  
 
-In [the next lab](../chat), we will try chatting with Amazon Q Business application.
+In [the next part](../chat), we will try chatting with Amazon Q Business application.
