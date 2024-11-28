@@ -29,7 +29,7 @@ What you need
 - An IAM User with the AdministratorAccess policy
 
 Then, follow the below instructions to get hands-on!
-1) [Lab setup](infra) to set up the lab infrastructure.  
+1) [Lab Infrastructure setup](infra)  
 2) [Amazon Q Business application setup](q-app)
 3) [Knowledge Base setup](knowledge)
 4) [Amazon Q Business Chat.](chat)
