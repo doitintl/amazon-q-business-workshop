@@ -36,6 +36,6 @@ Then, follow the below instructions to get hands-on!
 1) [Lab Infrastructure setup](infra)  
 2) [Amazon Q Business application setup](q-app)
 3) [Knowledge Base setup](knowledge)
-4) [Amazon Q Business chat.](chat)
+4) [Amazon Q Business chat](chat)
 5) [Admin controls and guardrails configuration](guardrail)
 6) [Custom plugins integration](custom)  
