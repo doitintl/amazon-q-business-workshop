@@ -5,9 +5,9 @@ Amazon Q Business is a generative AI assistant offering a unified conversational
 
 ## What it covers
 - Creating an Amazon Q Business application
-- Asking questions on your enterprise knowledge
+- Asking questions about your knowledge bases
 - Managing admin controls and adjusting guardrails
-- Talking with your system using natural languages
+- Chatting with your system using natural language
 
 ## Managed RAG options on AWS
 To manage Retrieval Augmented Generation (RAG) workflows on AWS, you can choose between custom RAG pipelines or fully managed AWS services is a kind of options. While fully managed services streamline operations by handling much of the undifferentiated heavy lifting with their core components, they provide fewer opportunities for customization.
