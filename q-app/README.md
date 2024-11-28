@@ -7,7 +7,6 @@ From the previous setup, we also provisioed an account instance of IAM Identity 
 ![IDC-1](./img/idc-1.png)  
 You can also view the group.  
 ![IDC-2](./img/idc-2.png)  
-
 3. We are going to reset a user password for sign-on to Amazon Q Business application web experience.  
 Navigate to a user `doit` and click **Reset password** located at the top right of the page.  
 ![IDC-3](./img/idc-3.png)  

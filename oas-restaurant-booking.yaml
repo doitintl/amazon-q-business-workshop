@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
   title: "Restaurant booking"
-  description: "API for booking a table in the restaurant using DynamoDB"
+  description: "API for booking a table in the restaurant"
   version: 1.0.0
 servers:
-- url: #[system api endpoint] "https://objsi6lgkb.execute-api.us-west-2.amazonaws.com/demo"
+- url: #[system api endpoint]
 paths:
   /booking:
     post:

@@ -4,7 +4,7 @@
 Amazon Q Business is a generative AI assistant offering a unified conversational experience to access enterprise knowledge. It can generate summaries, extract key insights, accelerate content creation, and streamline tasks. This workshop will guide you through setting up and using Amazon Q Business step-by-step.
 
 ## What it covers
-- [Creating an Amazon Q Business application](q-app)
+- Creating an Amazon Q Business application
 - Asking questions on your enterprise knowledge
 - Managing admin controls and adjusting guardrails
 - Talking with your system using natural languages
@@ -21,7 +21,7 @@ According to AWS, Amazon Q Business is the top recommended choice for a fully ma
 - Your RAG workflow requires customization beyond the standard capabilities of Amazon Q Business.
 - You need to use an existing vector database or integrate a specific LLM.
 
-In this workshop, we will expeirment with Amazon Q Business capabilities by using documents and a system from Lab 4 and 5 of [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
+In this workshop, we will expeirment with Amazon Q Business capabilities by using documents and a system from Lab 5 and 8 of [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
 
 ## :hammer_and_wrench: Getting started
 What you need 
