@@ -11,7 +11,7 @@ Amazon Q Business is a generative AI assistant offering a unified conversational
 
 ## Managed RAG options on AWS
 To manage Retrieval Augmented Generation (RAG) workflows on AWS, you can choose between custom RAG pipelines or fully managed AWS services is a kind of options. While fully managed services streamline operations by handling much of the undifferentiated heavy lifting with their core components, they provide fewer opportunities for customization.
-As stated in [AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/retrieval-augmented-generation-options/introduction.html), the following managed options are currently available on AWS:
+As stated in the [AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/retrieval-augmented-generation-options/introduction.html), the following managed options are currently available on AWS:
 - Knowledge bases for Amazon Bedrock
 - Amazon Q Business
 - Amazon SageMaker Canvas
@@ -32,6 +32,6 @@ Then, follow the below instructions to get hands-on!
 1) [Lab Infrastructure setup](infra)  
 2) [Amazon Q Business application setup](q-app)
 3) [Knowledge Base setup](knowledge)
-4) [Amazon Q Business Chat.](chat)
+4) [Amazon Q Business chat.](chat)
 5) [Admin controls and guardrails configuration](guardrail)
 6) [Custom plugins integration](custom)  
