@@ -135,9 +135,6 @@ Resources:
                                       )
                                       print("Group Member Creation:" + json.dumps(member_resp, indent=4, default=str))
                           cfnresponse.send(event, context, cfnresponse.SUCCESS, {'InstanceArn': instance_arn}, instance_arn)
-                  # elif event['RequestType'] == 'Delete':
-                  #     sso_client.delete_instance(InstanceArn=event['PhysicalResourceId'])
-                  #     cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, event['PhysicalResourceId'])
                   else:
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
                   print("done")
