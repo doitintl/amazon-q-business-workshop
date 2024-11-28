@@ -33,3 +33,18 @@ Copy the API schema content that you previously downloaded and edit the URL valu
 ![custom-10](./img/custom-10.png)  
 
 ## Conversing with a System
+1. Open the Q application, you can see **Plugins**, click it, and select *restaurant-booking-plugin*.  
+![custom-11](./img/custom-11.png)   
+2. Let's book a restaurant table. Using the chat
+`It's Pup. I want to reserve a table for 5 people, at 8:00pm on the 5th of December 2024.`  
+![custom-12](./img/custom-12.png)   
+The system replies with the booking ID, which can be used for other querys/actions.  
+Next, check the booking detail.  
+`check the detail of booking id {booking_id}, please.`  
+![custom-13](./img/custom-13.png)   
+Let's cancel the booking.  
+`I change my mind. Can you cancel f2e62626?`  
+![custom-14](./img/custom-14.png)   
+You can also refer to specific times in relation to the present, such as tomorrow or next week.  
+`I want to book for 10 people at 13:00 tomorrow under Doit.`  
+![custom-15](./img/custom-15.png)   
