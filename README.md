@@ -19,12 +19,10 @@ As stated in the [AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescri
 According to AWS, Amazon Q Business is the top recommended choice for a fully managed RAG solution. However, you should consider alternative options if your requirements fall into one of the following scenarios:
 - The service is unavailable in your AWS region, and moving data to a supported region is not feasible.
 - Your RAG workflow requires customization beyond the standard capabilities of Amazon Q Business.
-- You need to use an existing vector database or integrate a specific LLM.
-
-In this workshop, we will expeirment with Amazon Q Business capabilities by using documents and a system from Lab 5 and 8 of [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
+- You need to use an existing vector database or integrate a specific LLM.  
 
 ## :hammer_and_wrench: Getting started
-The lab environment is tailored from [AWS workshop - Innovate on enterprise data with generative AI & Amazon Q Business application](https://catalog.workshops.aws/amazon-q-business/en-US/110-what-you-will-build).  
+In this workshop, we’ll delve into the capabilities of Amazon Q Business, utilizing documents and systems from Labs 5 and 8 of the [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US). The lab environment was customized with a custom plugin, building on the [AWS workshop - Innovate on enterprise data with generative AI & Amazon Q Business application](https://catalog.workshops.aws/amazon-q-business/en-US/110-what-you-will-build).  
 
 ![diagram](diagram.png)
 
