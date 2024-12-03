@@ -15,7 +15,7 @@ We are going to configure admin controls and guardrails to control the applicati
 4. Go back to **Global controls**. This time we check *Allow Amazon Q to fall back to LLM knowledge* and click **Save**.  
 ![ctrl-4](./img/ctrl-4.png)  
 
-5. Go to your Q application and ask a question `What is ChatGPT`. And the reply indicates that no answer is found the Company Knowledge and the application retrieves the information from the model itself instead.  
+5. Go to your Q application and ask a question `What is ChatGPT?`. And the reply indicates that no answer is found the Company Knowledge and the application retrieves the information from the model itself instead.  
 ![ctrl-5](./img/ctrl-5.png)  
 
 ## Topic specific controls
