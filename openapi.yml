@@ -1,0 +1,180 @@
+openapi: 3.0.1
+info:
+  title: "Restaurant Booking API"
+  description: "API for managing restaurant table reservations"
+  version: 1.0.0
+servers:
+- url: https://api.example.com/demo
+paths:
+  /booking:
+    post:
+      summary: "Create a new restaurant booking"
+      description: "Create a new restaurant table reservation with guest details"
+      operationId: "createBooking"
+      requestBody:
+        description: "Details of the booking request"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        "200":
+          description: "Successfully created booking"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingSuccessResponse'
+        "400":
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /booking/{id}:
+    get:
+      summary: "Get booking details"
+      description: "Retrieve details of a specific restaurant booking"
+      operationId: "getBooking"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The ID of the booking to retrieve"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "Booking details retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetails'
+        "400":
+          description: "Invalid booking ID"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: "Cancel booking"
+      description: "Cancel an existing restaurant booking"
+      operationId: "cancelBooking"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The ID of the booking to cancel"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "Booking cancelled successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelResponse'
+        "400":
+          description: "Invalid booking ID"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    BookingRequest:
+      type: object
+      required:
+        - date
+        - name
+        - hour
+        - num_guests
+      properties:
+        date:
+          type: string
+          format: date
+          description: "The date of the booking (YYYY-MM-DD)"
+          example: "2025-11-03"
+        name:
+          type: string
+          description: "Name to identify your reservation"
+          maxLength: 100
+          example: "John Smith"
+        hour:
+          type: string
+          description: "The hour of the booking (HH:MM)"
+          pattern: "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
+          example: "19:30"
+        num_guests:
+          type: integer
+          description: "The number of guests for the booking"
+          minimum: 1
+          maximum: 20
+          example: 4
+    BookingSuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Success message with booking details"
+          example: "Success! Your booking on 2025-11-03 at 19:30 by John Smith for 4 guests is confirmed. Your booking ID is 7f0bdd0c."
+        booking_id:
+          type: string
+          description: "Unique identifier for the booking"
+          example: "7f0bdd0c"
+    BookingDetails:
+      type: object
+      properties:
+        booking_id:
+          type: string
+          description: "Unique identifier for the booking"
+          example: "7f0bdd0c"
+        date:
+          type: string
+          format: date
+          description: "The date of the booking"
+          example: "2025-11-03"
+        name:
+          type: string
+          description: "Name on the reservation"
+          example: "John Smith"
+        hour:
+          type: string
+          description: "The hour of the booking"
+          example: "19:30"
+        num_guests:
+          type: integer
+          description: "The number of guests for the booking"
+          example: 4
+    CancelResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Success message for booking cancellation"
+          example: "Booking with ID 7f0bdd0c deleted successfully"
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Error message"
+          example: "Missing required parameters"
